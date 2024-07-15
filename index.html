@@ -3,10 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My GitHub Page</title>
+    <title>AWS Cognito SDK</title>
 </head>
 <body>
-    <h1>Welcome to My GitHub Page</h1>
-    <p>This is a sample page deployed via GitHub Pages.</p>
+    <h1>Welcome to AWS Cognito SDK</h1>
+    <button id="googleSignInButton">Sign in with Google</button>
+
+    <script src="sdk/node_modules/amazon-cognito-identity-js/dist/amazon-cognito-identity.min.js"></script>
+    <script src="sdk/node_modules/amazon-cognito-auth-js/dist/amazon-cognito-auth.min.js"></script>
+    <script>
+        // Configuration
+        const poolData = {
+            UserPoolId: 'us-east-1_Qt0u6WFWf', // Your user pool id here
+            ClientId: '2c1h277gmpk77mg3e1dpftt8lg' // Your app client id here
+        };
+        const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
+
+        // Cognito Auth Configuration
+        const authData = {
+            ClientId: poolData.ClientId,
+            AppWebDomain: 'https://elipse-platform-oauth.auth.us-east-1.amazoncognito.com',
+            TokenScopesArray: ['email', 'profile', 'openid'],
+            RedirectUriSignIn: 'YOUR_REDIRECT_URI',
+            RedirectUriSignOut: 'YOUR_SIGN_OUT_URI',
+            IdentityProvider: 'Google'
+        };
+        const auth = new AmazonCognitoIdentity.CognitoAuth(authData);
+
+        // Sign-In Function for Google
+        function signInWithGoogle() {
+            auth.useCodeGrantFlow();
+            auth.signIn();
+        }
+
+        // Attach Google Sign-In function to the button
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById("googleSignInButton").addEventListener("click", signInWithGoogle);
+        });
+    </script>
 </body>
 </html>
